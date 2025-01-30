@@ -11,7 +11,7 @@ public class EchoLex {
 
     public static void main(String[] args) {
 
-        echoInput("Hello! I'm EchoLex" + "\n" + "What can I do for you?");
+        boxInput("Hello! I'm EchoLex" + "\n" + "What can I do for you?");
 
         Scanner in = new Scanner(System.in);
         String userInput = "";
@@ -32,28 +32,35 @@ public class EchoLex {
     public static boolean parseInput(String input) {
 
         // Split Input into Command and Arguments
-        String[] parts = input.split(" ");
-        String command = parts[0];
+        String[] parts = input.split("/");
+
+        // Main Command
+        String[] main = parts[0].split(" ", 2);
+        String command = main[0];
         String argument = "";
-        if (parts.length > 1) {
-            argument = parts[1];
+        if (main.length > 1) {
+            argument = main[1];
         }
 
         // Execute Command
         switch (command) {
         case "list":
-            echoInput(listCommand());
+            boxInput(listCommand());
             break;
         case "mark":
         case "unmark":
-            echoInput(markCommand(command, argument));
+            boxInput(markCommand(command, argument));
+            break;
+        case "todo":
+        case "deadline":
+        case "event":
+            boxInput(addTask(command, argument, parts));
             break;
         case "bye":
-            echoInput("Bye. Hope to see you again soon!");
+            boxInput("Bye. Hope to see you again soon!");
             return true;
         default:
-            memory.add(new Task(input));
-            echoInput("added: " + input);
+            boxInput("Sorry, I did not understand that command.");
             break;
         }
 
@@ -66,7 +73,7 @@ public class EchoLex {
      *
      * @param input Input to be formatted between horizontal lines.
      */
-    public static void echoInput(String input) {
+    public static void boxInput(String input) {
 
         String indent = "    ";     // 4 spaces
 
@@ -91,7 +98,7 @@ public class EchoLex {
         String result = "";
 
         for (Task input : memory) {
-            result = result.concat(counter + ".[" + input.getStatusIcon() + "] " + input.getDescription() + "\n");
+            result = result.concat(counter + "." + input.toString() + "\n");
             counter++;
         }
 
@@ -111,18 +118,80 @@ public class EchoLex {
         String result = "";
 
         int markIndex = Integer.parseInt(index);
-        if (markIndex >= memory.size()) {
+        if (markIndex > memory.size()) {
             return "That task is out of range! Please try again.";
         } else {
             Task markEntry = memory.get(markIndex - 1);
             if (mark.equals("mark")) {
                 markEntry.markDone();
-                return "Nice! I've marked this task as done:\n  [X] " + markEntry.getDescription();
+                return "Nice! I've marked this task as done:\n  " + markEntry.toString();
             } else {
                 markEntry.unmarkDone();
-                return "OK, I've marked this task as not done yet:\n  [ ] " + markEntry.getDescription();
+                return "OK, I've marked this task as not done yet:\n  " + markEntry.toString();
             }
         }
+
+    }
+
+    /**
+     * Add Tasks.
+     *
+     * @param type "todo"/"deadline"/"event".
+     * @param description Task description.
+     * @param options Deadline time or event duration.
+     * @return Task created message.
+     */
+    public static String addTask(String type, String description, String[] options) {
+
+        Task task;
+
+        switch (type) {
+        case "deadline":
+            String by = searchOption(options, "by");
+            if (by.isEmpty()) {
+                return "Error: Deadline option '/by' has not been provided.";
+            }
+            task = new Deadline(description, by);
+            break;
+        case "event":
+            String from = searchOption(options, "from");
+            if (from.isEmpty()) {
+                return "Error: Event option '/from' has not been provided.";
+            }
+            String to = searchOption(options, "to");
+            if (to.isEmpty()) {
+                return "Error: Event option '/to' has not been provided.";
+            }
+            task = new Event(description, from, to);
+            break;
+        default:
+            task = new Todo(description);
+        }
+
+        memory.add(task);
+
+        String result = "Got it. I've added this task:\n  " + task.toString();
+        result = result.concat("\nNow you have " + memory.size() + " tasks in the list.");
+        return result;
+
+    }
+
+    /**
+     * Search for an option and return its argument.
+     *
+     * @param options List of options previously split by "/".
+     * @param search Option to search for.
+     * @return Argument for Option.
+     */
+    public static String searchOption(String[] options, String search) {
+
+        for (String option : options) {
+            String[] parts = option.split(" ", 2);
+            if (parts[0].equals(search)) {
+                return parts[1];
+            }
+        }
+        return "";
 
     }
 
