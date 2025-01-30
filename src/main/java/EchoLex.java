@@ -3,10 +3,11 @@ import java.util.ArrayList;
 
 public class EchoLex {
 
-    /** Chat Delimiter: Horizontal Line */
-    static final String HORIZONTAL_LINE = "____________________________________________________________";
     /** User Input Text Memory */
     private static ArrayList<Task> memory = new ArrayList<>();
+
+    /** Chat Delimiter: Horizontal Line */
+    static final String HORIZONTAL_LINE = "____________________________________________________________";
 
     public static void main(String[] args) {
 
@@ -44,24 +45,8 @@ public class EchoLex {
             echoInput(listCommand());
             break;
         case "mark":
-            int markIndex = Integer.parseInt(argument);
-            if (markIndex < memory.size()) {
-                Task markEntry = memory.get(markIndex - 1);
-                markEntry.markDone();
-                echoInput("Nice! I've marked this task as done:\n  [X] " + markEntry.getDescription());
-            } else {
-                echoInput("That task is out of range! Please try again.");
-            }
-            break;
         case "unmark":
-            int unmarkIndex = Integer.parseInt(argument);
-            if (unmarkIndex < memory.size()) {
-                Task unmarkEntry = memory.get(unmarkIndex - 1);
-                unmarkEntry.unmarkDone();
-                echoInput("OK, I've marked this task as not done yet:\n  [ ] " + unmarkEntry.getDescription());
-            } else {
-                echoInput("That task is out of range! Please try again.");
-            }
+            echoInput(markCommand(command, argument));
             break;
         case "bye":
             echoInput("Bye. Hope to see you again soon!");
@@ -98,7 +83,7 @@ public class EchoLex {
     /**
      * Lists previous input from user saved in memory.
      *
-     * @return Formatted memory string.
+     * @return Formatted memory list string.
      */
     public static String listCommand() {
 
@@ -111,6 +96,33 @@ public class EchoLex {
         }
 
         return result;
+
+    }
+
+    /**
+     * Marks or unmarks tasks as done.
+     *
+     * @param mark Marking/unmarking.
+     * @param index Index to be marked (to be converted to integer).
+     * @return Result of marking/unmarking.
+     */
+    public static String markCommand(String mark, String index) {
+
+        String result = "";
+
+        int markIndex = Integer.parseInt(index);
+        if (markIndex >= memory.size()) {
+            return "That task is out of range! Please try again.";
+        } else {
+            Task markEntry = memory.get(markIndex - 1);
+            if (mark.equals("mark")) {
+                markEntry.markDone();
+                return "Nice! I've marked this task as done:\n  [X] " + markEntry.getDescription();
+            } else {
+                markEntry.unmarkDone();
+                return "OK, I've marked this task as not done yet:\n  [ ] " + markEntry.getDescription();
+            }
+        }
 
     }
 
