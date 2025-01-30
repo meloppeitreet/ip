@@ -49,12 +49,20 @@ public class EchoLex {
             break;
         case "mark":
         case "unmark":
-            boxInput(markCommand(command, argument));
+            try {
+                boxInput(markCommand(command, argument));
+            } catch (EchoLexException e) {
+                boxInput("EchoLex Error: " + e.getMessage());
+            }
             break;
         case "todo":
         case "deadline":
         case "event":
-            boxInput(addTask(command, argument, parts));
+            try {
+                boxInput(addTask(command, argument, parts));
+            } catch (EchoLexException e) {
+                boxInput("EchoLex Error: " + e.getMessage());
+            }
             break;
         case "bye":
             boxInput("Bye. Hope to see you again soon!");
@@ -113,13 +121,13 @@ public class EchoLex {
      * @param index Index to be marked (to be converted to integer).
      * @return Result of marking/unmarking.
      */
-    public static String markCommand(String mark, String index) {
+    public static String markCommand(String mark, String index) throws EchoLexException {
 
         String result = "";
 
         int markIndex = Integer.parseInt(index);
         if (markIndex > memory.size()) {
-            return "That task is out of range! Please try again.";
+            throw new EchoLexException("The specified task is out of range. Please try again.");
         } else {
             Task markEntry = memory.get(markIndex - 1);
             if (mark.equals("mark")) {
@@ -141,7 +149,7 @@ public class EchoLex {
      * @param options Deadline time or event duration.
      * @return Task created message.
      */
-    public static String addTask(String type, String description, String[] options) {
+    public static String addTask(String type, String description, String[] options) throws EchoLexException {
 
         Task task;
 
@@ -149,18 +157,18 @@ public class EchoLex {
         case "deadline":
             String by = searchOption(options, "by");
             if (by.isEmpty()) {
-                return "Error: Deadline option '/by' has not been provided.";
+                throw new EchoLexException("Deadline option '/by' has not been provided.");
             }
             task = new Deadline(description, by);
             break;
         case "event":
             String from = searchOption(options, "from");
             if (from.isEmpty()) {
-                return "Error: Event option '/from' has not been provided.";
+                throw new EchoLexException("Event option '/from' has not been provided.");
             }
             String to = searchOption(options, "to");
             if (to.isEmpty()) {
-                return "Error: Event option '/to' has not been provided.";
+                throw new EchoLexException("Event option '/to' has not been provided.");
             }
             task = new Event(description, from, to);
             break;
