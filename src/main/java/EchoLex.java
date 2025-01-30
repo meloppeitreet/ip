@@ -55,6 +55,13 @@ public class EchoLex {
                 boxInput("EchoLex Error: " + e.getMessage());
             }
             break;
+        case "delete":
+            try {
+                boxInput(deleteCommand(argument));
+            } catch (EchoLexException e) {
+                boxInput("EchoLex Error: " + e.getMessage());
+            }
+            break;
         case "todo":
         case "deadline":
         case "event":
@@ -123,10 +130,8 @@ public class EchoLex {
      */
     public static String markCommand(String mark, String index) throws EchoLexException {
 
-        String result = "";
-
         int markIndex = Integer.parseInt(index);
-        if (markIndex > memory.size()) {
+        if (markIndex > memory.size() || markIndex < 0) {
             throw new EchoLexException("The specified task is out of range. Please try again.");
         } else {
             Task markEntry = memory.get(markIndex - 1);
@@ -181,6 +186,26 @@ public class EchoLex {
         String result = "Got it. I've added this task:\n  " + task.toString();
         result = result.concat("\nNow you have " + memory.size() + " tasks in the list.");
         return result;
+
+    }
+
+    /**
+     * Delete tasks.
+     *
+     * @param index Index to be deleted (to be converted to integer).
+     * @return Result of task deletion.
+     */
+    public static String deleteCommand(String index) throws EchoLexException {
+
+        int deleteIndex = Integer.parseInt(index);
+        if (deleteIndex > memory.size() || deleteIndex < 0) {
+            throw new EchoLexException("The specified task is out of range. Please try again.");
+        } else {
+            String result =  "Noted. I've removed this task:\n  " + memory.get(deleteIndex - 1).toString();
+            memory.remove(deleteIndex - 1);
+            result += "\nNow you have " + memory.size() + " tasks in the list.";
+            return result;
+        }
 
     }
 
