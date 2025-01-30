@@ -95,7 +95,7 @@ public class EchoLex {
     public static String listCommand() {
 
         int counter = 1;
-        String result = "";
+        String result = "Here are the tasks in your list:\n";
 
         for (Task input : memory) {
             result = result.concat(counter + "." + input.toString() + "\n");
