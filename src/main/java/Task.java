@@ -10,9 +10,9 @@ public class Task {
     protected boolean isDone;
     private Importance importance;
 
-    public Task(String description) {
+    public Task(String description, Boolean isDone) {
         this.description = description;
-        this.isDone = false;
+        this.isDone = isDone;
         this.importance = Importance.LOW;
     }
 
@@ -48,6 +48,10 @@ public class Task {
         default:
             break;
         }
+    }
+
+    public String saveFormat() {
+        return "T | " + (isDone ? "1" : "0") + " | " + description;
     }
 
     @Override

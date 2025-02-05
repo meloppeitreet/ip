@@ -1,6 +1,13 @@
 import java.util.Scanner;
 import java.util.ArrayList;
 
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class EchoLex {
 
     /** User Input Text Memory */
@@ -9,7 +16,13 @@ public class EchoLex {
     /** Chat Delimiter: Horizontal Line */
     static final String HORIZONTAL_LINE = "____________________________________________________________";
 
+    /** Tasks Save Location */
+    static final String SAVE_DIRECTORY = "./data";
+    static final String SAVE_LOCATION = "./data/EchoLex.txt";
+
     public static void main(String[] args) {
+
+        loadTasks();
 
         boxInput("Hello! I'm EchoLex" + "\n" + "What can I do for you?");
 
@@ -54,6 +67,7 @@ public class EchoLex {
             } catch (EchoLexException e) {
                 boxInput("EchoLex Error: " + e.getMessage());
             }
+            saveTasks();
             break;
         case "delete":
             try {
@@ -61,6 +75,7 @@ public class EchoLex {
             } catch (EchoLexException e) {
                 boxInput("EchoLex Error: " + e.getMessage());
             }
+            saveTasks();
             break;
         case "todo":
         case "deadline":
@@ -70,6 +85,7 @@ public class EchoLex {
             } catch (EchoLexException e) {
                 boxInput("EchoLex Error: " + e.getMessage());
             }
+            saveTasks();
             break;
         case "bye":
             boxInput("Bye. Hope to see you again soon!");
@@ -130,18 +146,22 @@ public class EchoLex {
      */
     public static String markCommand(String mark, String index) throws EchoLexException {
 
-        int markIndex = Integer.parseInt(index);
-        if (markIndex > memory.size() || markIndex < 0) {
-            throw new EchoLexException("The specified task is out of range. Please try again.");
-        } else {
-            Task markEntry = memory.get(markIndex - 1);
-            if (mark.equals("mark")) {
-                markEntry.markDone();
-                return "Nice! I've marked this task as done:\n  " + markEntry.toString();
+        try {
+            int markIndex = Integer.parseInt(index);
+            if (markIndex > memory.size() || markIndex < 0) {
+                throw new EchoLexException("The specified task is out of range. Please try again.");
             } else {
-                markEntry.unmarkDone();
-                return "OK, I've marked this task as not done yet:\n  " + markEntry.toString();
+                Task markEntry = memory.get(markIndex - 1);
+                if (mark.equals("mark")) {
+                    markEntry.markDone();
+                    return "Nice! I've marked this task as done:\n  " + markEntry.toString();
+                } else {
+                    markEntry.unmarkDone();
+                    return "OK, I've marked this task as not done yet:\n  " + markEntry.toString();
+                }
             }
+        } catch (NumberFormatException e) {
+            throw new EchoLexException("Invalid index: " + index);
         }
 
     }
@@ -164,7 +184,7 @@ public class EchoLex {
             if (by.isEmpty()) {
                 throw new EchoLexException("Deadline option '/by' has not been provided.");
             }
-            task = new Deadline(description, by);
+            task = new Deadline(description, Boolean.FALSE, by);
             break;
         case "event":
             String from = searchOption(options, "from");
@@ -175,10 +195,10 @@ public class EchoLex {
             if (to.isEmpty()) {
                 throw new EchoLexException("Event option '/to' has not been provided.");
             }
-            task = new Event(description, from, to);
+            task = new Event(description, Boolean.FALSE, from, to);
             break;
         default:
-            task = new Todo(description);
+            task = new Todo(description, Boolean.FALSE);
         }
 
         memory.add(task);
@@ -225,6 +245,82 @@ public class EchoLex {
             }
         }
         return "";
+
+    }
+
+    /**
+     * Load tasks from ./data/EchoLex.txt on the hard disk.
+     */
+    public static void loadTasks() {
+
+        memory.clear();     // just in case loadTasks() is called while memory is populated
+
+        File file = new File(SAVE_LOCATION);
+        File directory = file.getParentFile();
+        if (directory != null && !directory.exists()) {
+            directory.mkdirs(); // Creates missing parent "data" directory
+        }
+        if (!file.exists()) {   // Create the save file if it does not exist
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                boxInput("EchoLex Error: " + e.getMessage());
+            }
+            return;
+        }
+
+        // Loading task entries from save file
+        try (BufferedReader reader = new BufferedReader(new FileReader(SAVE_LOCATION))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(" \\| ");
+                switch (parts[0]) {
+                case "T":
+                    memory.add(new Todo(parts[2], (parts[1].equals("1"))));
+                    break;
+                case "D":
+                    memory.add(new Deadline(parts[2], (parts[1].equals("1")), parts[3]));
+                    break;
+                case "E":
+                    memory.add(new Event(parts[2], (parts[1].equals("1")), parts[3], parts[4]));
+                    break;
+                default:
+                    break;
+                }
+            }
+        } catch (IOException e) {
+            boxInput("EchoLex Error: " + e.getMessage());
+        }
+
+    }
+
+    /**
+     * Save tasks in ./data/EchoLex.txt on the hard disk.
+     */
+    public static void saveTasks() {
+
+        File file = new File(SAVE_LOCATION);
+        File directory = file.getParentFile();
+        if (directory != null && !directory.exists()) {
+            directory.mkdirs(); // Creates missing parent "data" directory
+        }
+        if (!file.exists()) {   // Create the save file if it does not exist
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                boxInput("EchoLex Error: " + e.getMessage());
+            }
+        }
+
+        // Writing task entries to save file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(SAVE_LOCATION))) {
+            for (Task task : memory) {
+                writer.write(task.saveFormat());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            boxInput("EchoLex Error: " + e.getMessage());
+        }
 
     }
 
