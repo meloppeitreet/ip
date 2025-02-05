@@ -8,6 +8,14 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.ResolverStyle;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoField;
+
 public class EchoLex {
 
     /** User Input Text Memory */
@@ -184,7 +192,12 @@ public class EchoLex {
             if (by.isEmpty()) {
                 throw new EchoLexException("Deadline option '/by' has not been provided.");
             }
-            task = new Deadline(description, Boolean.FALSE, by);
+            try {   // parse "by" date
+                LocalDateTime byDate = parseDate(by);
+                task = new Deadline(description, Boolean.FALSE, byDate);
+            } catch (EchoLexException e) {
+                throw new EchoLexException(e.getMessage());
+            }
             break;
         case "event":
             String from = searchOption(options, "from");
@@ -195,7 +208,13 @@ public class EchoLex {
             if (to.isEmpty()) {
                 throw new EchoLexException("Event option '/to' has not been provided.");
             }
-            task = new Event(description, Boolean.FALSE, from, to);
+            try {   // parse "from" and "to" dates
+                LocalDateTime fromDate = parseDate(from);
+                LocalDateTime toDate = parseDate(to);
+                task = new Event(description, Boolean.FALSE, fromDate, toDate);
+            } catch (EchoLexException e) {
+                throw new EchoLexException(e.getMessage());
+            }
             break;
         default:
             task = new Todo(description, Boolean.FALSE);
@@ -279,10 +298,21 @@ public class EchoLex {
                     memory.add(new Todo(parts[2], (parts[1].equals("1"))));
                     break;
                 case "D":
-                    memory.add(new Deadline(parts[2], (parts[1].equals("1")), parts[3]));
+                    try {
+                        LocalDateTime by = parseDate(parts[3]);
+                        memory.add(new Deadline(parts[2], (parts[1].equals("1")), by));
+                    } catch (EchoLexException e) {
+                        boxInput("EchoLex Error: " + e.getMessage());
+                    }
                     break;
                 case "E":
-                    memory.add(new Event(parts[2], (parts[1].equals("1")), parts[3], parts[4]));
+                    try {
+                        LocalDateTime from = parseDate(parts[3]);
+                        LocalDateTime to = parseDate(parts[4]);
+                        memory.add(new Event(parts[2], (parts[1].equals("1")), from, to));
+                    } catch (EchoLexException e) {
+                        boxInput("EchoLex Error: " + e.getMessage());
+                    }
                     break;
                 default:
                     break;
@@ -320,6 +350,35 @@ public class EchoLex {
             }
         } catch (IOException e) {
             boxInput("EchoLex Error: " + e.getMessage());
+        }
+
+    }
+
+    /**
+     * Parse date in command string to LocalDateTime object.
+     *
+     * @param dateString Command string containing date.
+     * @return LocalDateTime object.
+     */
+    public static LocalDateTime parseDate(String dateString) throws EchoLexException {
+
+        try {
+
+            dateString = dateString.trim();
+            DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                    .appendOptional(DateTimeFormatter.ofPattern("yyyy-M-d"))
+                    .appendOptional(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+                    .appendOptional(DateTimeFormatter.ofPattern("dd-MM-yyyy"))
+                    .appendOptional(DateTimeFormatter.ofPattern("MMM dd yyyy"))
+                    .parseDefaulting(ChronoField.ERA, 1)
+                    .toFormatter()
+                    .withResolverStyle(ResolverStyle.STRICT);
+
+            LocalDate date = LocalDate.parse(dateString, formatter);
+            return date.atStartOfDay();  // may be modified to accommodate time in the future
+
+        } catch (DateTimeParseException e) {
+            throw new EchoLexException("Invalid date: " + e.getMessage() + "\nPlease provide the date in yyyy-mm-dd format (e.g., 2019-10-15)");
         }
 
     }
