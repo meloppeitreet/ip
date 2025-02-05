@@ -7,16 +7,25 @@ import java.io.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * Handles loading and saving of tasks to a specified file.
+ */
 public class Storage {
 
     private String filePath;
 
+    /**
+     * Constructs a Storage object with the given file path.
+     *
+     * @param filePath The path of the file to store task data.
+     */
     public Storage(String filePath) {
         this.filePath = filePath;
     }
 
     /**
-     * Loads tasklist from specified filePath.
+     * Loads task list from specified filePath.
+     * If the file does not exist, it creates an empty task list.
      *
      * @return TaskList object.
      */
@@ -77,7 +86,9 @@ public class Storage {
     }
 
     /**
-     * Saves tasklist to specified filePath.
+     * Saves the given task list to the specified filePath.
+     *
+     * @param tasks The task list to save.
      */
     public void save(TaskList tasks) throws EchoLexException {
 

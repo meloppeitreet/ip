@@ -13,6 +13,9 @@ import java.time.temporal.ChronoField;
 import java.util.HashMap;
 import java.util.Arrays;
 
+/**
+ * Represents a command that can be executed on a task list.
+ */
 public class Parser {
 
     /**

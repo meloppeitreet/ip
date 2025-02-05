@@ -6,30 +6,63 @@ import echolex.task.*;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
+/**
+ * Represents a command that can be executed on a task list.
+ */
 public class Command {
 
     private final String command;
     private final String argument;
     private final HashMap<String, String> options;
 
+    /**
+     * Constructs a Command object.
+     *
+     * @param command The command type.
+     * @param argument The argument for the command.
+     * @param options Additional options for the command.
+     */
     public Command(String command, String argument, HashMap<String, String> options) {
         this.command = command;
         this.argument = argument;
         this.options = options;
     }
 
+    /**
+     * Gets the command type.
+     *
+     * @return The command type.
+     */
     public String getCommand() {
         return command;
     }
 
+    /**
+     * Gets the argument associated with the command.
+     *
+     * @return The command argument.
+     */
     public String getArgument() {
         return argument;
     }
 
+    /**
+     * Retrieves the value of an option based on its key.
+     *
+     * @param key The key of the option.
+     * @return The value associated with the key, or an empty string if not found.
+     */
     public String getOptions(String key) {
         return options.getOrDefault(key, "");
     }
 
+    /**
+     * Executes the command on the given task list.
+     *
+     * @param tasks The list of tasks.
+     * @param ui The user interface for displaying messages.
+     * @param storage The storage handler for saving tasks.
+     */
     public void execute(TaskList tasks, Ui ui, Storage storage) {
 
         switch (command) {
@@ -71,6 +104,7 @@ public class Command {
         }
 
     }
+
     /**
      * Checks if the command input is the exit command.
      *
