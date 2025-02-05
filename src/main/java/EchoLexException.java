@@ -1,5 +1,3 @@
-package echolex.error;
-
 public class EchoLexException extends Exception {
     public EchoLexException() {
         super("EchoLex exception occurred");
