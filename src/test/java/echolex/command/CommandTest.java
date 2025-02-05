@@ -142,4 +142,16 @@ class CommandTest {
 
         assertThrows(EchoLexException.class, () -> addEventCommand.addCommand(taskList));
     }
+
+    @Test
+    void testFindCommand() {
+        taskList.add(new Todo("Buy milk", false));
+        taskList.add(new Deadline("Submit assignment", false, LocalDateTime.of(2025, 2, 10, 23, 59)));
+        taskList.add(new Event("Deliver milk", false, LocalDateTime.of(2025, 3, 1, 10, 0), LocalDateTime.of(2025, 3, 1, 12, 0)));
+
+        Command findCommand = new Command("find", "milk", new HashMap<>());
+        String expectedOutput = "1.[T][ ] Buy milk\n2.[E][ ] Deliver milk (from: Mar 01 2025 to: Mar 01 2025)\n";
+
+        assertEquals(expectedOutput, findCommand.findCommand(taskList));
+    }
 }

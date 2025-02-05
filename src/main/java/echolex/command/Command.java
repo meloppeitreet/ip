@@ -4,6 +4,7 @@ import echolex.error.EchoLexException;
 import echolex.task.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -68,6 +69,9 @@ public class Command {
         switch (command) {
         case "list":
             ui.boxInput(listCommand(tasks));
+            break;
+        case "find":
+            ui.boxInput(findCommand(tasks));
             break;
         case "mark":
         case "unmark":
@@ -231,6 +235,28 @@ public class Command {
             result += "\nNow you have " + tasks.size() + " tasks in the list.";
             return result;
         }
+
+    }
+
+    /**
+     * Find tasks.
+     *
+     * @param tasks List of Tasks.
+     * @return Result of task deletion.
+     */
+    public String findCommand(TaskList tasks) {
+
+        int counter = 1;
+        String result = "";
+
+        for (Task task : tasks) {
+            if (task.getDescription().contains(argument)) {
+                result = result.concat(counter + "." + task.toString() + "\n");
+                counter++;
+            }
+        }
+
+        return result;
 
     }
 

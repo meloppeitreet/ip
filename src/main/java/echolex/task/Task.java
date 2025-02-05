@@ -18,6 +18,10 @@ public class Task {
         this.importance = Importance.LOW;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void markDone() {
         isDone = true;
     }
