@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class Ui {
 
     /** Chat Indent */
-    static final String indent = "    ";     // 4 spaces
+    static final String INDENT = "    ";     // 4 spaces
     /** Chat Delimiter: Horizontal Line */
     static final String HORIZONTAL_LINE = "____________________________________________________________";
 
@@ -39,7 +39,7 @@ public class Ui {
      * Shows horizontal line.
      */
     public void showLine() {
-        System.out.println(indent + HORIZONTAL_LINE);
+        System.out.println(INDENT + HORIZONTAL_LINE);
     }
 
     /**
@@ -49,11 +49,11 @@ public class Ui {
      */
     public void boxInput(String input) {
 
-        System.out.println(indent + HORIZONTAL_LINE);
+        System.out.println(INDENT + HORIZONTAL_LINE);
         for (String line : input.split("\n")) {
-            System.out.println(indent + " " + line);
+            System.out.println(INDENT + " " + line);
         }
-        System.out.println(indent + HORIZONTAL_LINE);
+        System.out.println(INDENT + HORIZONTAL_LINE);
         System.out.println();
 
     }
