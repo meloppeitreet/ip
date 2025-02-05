@@ -31,7 +31,7 @@ public class Parser {
         String command = main[0];
         String argument = "";
         if (main.length > 1) {
-            argument = main[1];
+            argument = main[1].trim();
         }
 
         // Options

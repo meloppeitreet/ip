@@ -18,6 +18,18 @@ public class Command {
         this.options = options;
     }
 
+    public String getCommand() {
+        return command;
+    }
+
+    public String getArgument() {
+        return argument;
+    }
+
+    public String getOptions(String key) {
+        return options.getOrDefault(key, "");
+    }
+
     public void execute(TaskList tasks, Ui ui, Storage storage) {
 
         switch (command) {
@@ -129,7 +141,7 @@ public class Command {
         switch (command) {
         case "deadline":
             String by = options.get("by");
-            if (by.isEmpty()) {
+            if (by == null) {
                 throw new EchoLexException("Deadline option '/by' has not been provided.");
             }
             try {   // parse "by" date
@@ -141,11 +153,11 @@ public class Command {
             break;
         case "event":
             String from = options.get("from");
-            if (from.isEmpty()) {
+            if (from == null) {
                 throw new EchoLexException("Event option '/from' has not been provided.");
             }
             String to = options.get("to");
-            if (to.isEmpty()) {
+            if (to == null) {
                 throw new EchoLexException("Event option '/to' has not been provided.");
             }
             try {   // parse "from" and "to" dates
