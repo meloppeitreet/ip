@@ -1,5 +1,3 @@
-package echolex.task;
-
 enum Importance {
     LOW,
     MEDIUM,
