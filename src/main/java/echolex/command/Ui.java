@@ -1,3 +1,5 @@
+package echolex.command;
+
 import java.util.Scanner;
 
 public class Ui {
