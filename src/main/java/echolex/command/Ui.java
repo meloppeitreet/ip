@@ -9,20 +9,38 @@ public class Ui {
     /** Chat Delimiter: Horizontal Line */
     static final String HORIZONTAL_LINE = "____________________________________________________________";
 
+    /** Chat Hello / Goodbye */
+    static final String HELLO = "Hello! I'm EchoLex" + "\n" + "What can I do for you?";
+    static final String GOODBYE = "Bye. Hope to see you again soon!";
+
     public Ui() { };
 
     /**
      * Shows welcome message to user.
      */
     public void showWelcome() {
-        boxInput("Hello! I'm EchoLex" + "\n" + "What can I do for you?");
+        boxInput(HELLO);
     }
 
     /**
      * Shows goodbye message to user.
      */
     public void showGoodbye() {
-        boxInput("Bye. Hope to see you again soon!");
+        boxInput(GOODBYE);
+    }
+
+    /**
+     * Get welcome message to user.
+     */
+    public String getWelcome() {
+        return HELLO;
+    }
+
+    /**
+     * Get goodbye message to user.
+     */
+    public String getGoodbye() {
+        return GOODBYE;
     }
 
     /**

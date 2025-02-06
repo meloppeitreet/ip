@@ -24,6 +24,26 @@ public class EchoLex {
         }
     }
 
+    public String getResponse(String input) {
+
+        if (input.isEmpty()) {
+            return ui.getWelcome();
+        }
+
+        try {
+            Command c = Parser.parse(input);
+            String reply = c.execute(tasks);
+            storage.save(tasks);
+            if (c.isExit()) {
+                return ui.getGoodbye();
+            }
+            return reply;
+        } catch (EchoLexException e) {
+            return e.getMessage();
+        }
+
+    }
+
     public void run() {
 
         ui.showWelcome();
@@ -32,7 +52,8 @@ public class EchoLex {
             try {
                 String fullCommand = ui.readCommand();
                 Command c = Parser.parse(fullCommand);
-                c.execute(tasks, ui, storage);
+                ui.boxInput(c.execute(tasks));
+                storage.save(tasks);
                 isExit = c.isExit();
             } catch (EchoLexException e) {
                 ui.boxInput(e.getMessage());
