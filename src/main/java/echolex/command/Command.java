@@ -1,11 +1,14 @@
 package echolex.command;
 
-import echolex.error.EchoLexException;
-import echolex.task.*;
-
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
+
+import echolex.error.EchoLexException;
+import echolex.task.Deadline;
+import echolex.task.Event;
+import echolex.task.Task;
+import echolex.task.TaskList;
+import echolex.task.Todo;
 
 /**
  * Represents a command that can be executed on a task list.
@@ -142,7 +145,7 @@ public class Command {
                 if (command.equals("mark")) {
                     markEntry.markDone();
                     return "Nice! I've marked this task as done:\n  " + markEntry.toString();
-                } else {    // if the command is "unmark"
+                } else { // if the command is "unmark"
                     markEntry.unmarkDone();
                     return "OK, I've marked this task as not done yet:\n  " + markEntry.toString();
                 }
@@ -169,7 +172,7 @@ public class Command {
             if (by == null) {
                 throw new EchoLexException("Deadline option '/by' has not been provided.");
             }
-            try {   // parse "by" date
+            try { // parse "by" date
                 LocalDateTime byDate = Parser.parseDate(by);
                 task = new Deadline(argument, Boolean.FALSE, byDate);
             } catch (EchoLexException e) {
@@ -185,7 +188,7 @@ public class Command {
             if (to == null) {
                 throw new EchoLexException("Event option '/to' has not been provided.");
             }
-            try {   // parse "from" and "to" dates
+            try { // parse "from" and "to" dates
                 LocalDateTime fromDate = Parser.parseDate(from);
                 LocalDateTime toDate = Parser.parseDate(to);
                 task = new Event(argument, Boolean.FALSE, fromDate, toDate);
@@ -217,7 +220,7 @@ public class Command {
         if (deleteIndex > tasks.size() || deleteIndex < 0) {
             throw new EchoLexException("The specified task is out of range. Please try again.");
         } else {
-            String result =  "Noted. I've removed this task:\n  " + tasks.get(deleteIndex - 1).toString();
+            String result = "Noted. I've removed this task:\n  " + tasks.get(deleteIndex - 1).toString();
             tasks.remove(deleteIndex - 1);
             result += "\nNow you have " + tasks.size() + " tasks in the list.";
             return result;
