@@ -42,7 +42,7 @@ public class MainWindow extends AnchorPane {
         // Initial Message
         String response = echoLex.getResponse("");
         dialogContainer.getChildren().addAll(
-                DialogBox.getDukeDialog(response, dukeImage)
+                DialogBox.getEchoLexDialog(response, dukeImage, "")
         );
     }
 
@@ -54,9 +54,10 @@ public class MainWindow extends AnchorPane {
     private void handleUserInput() {
         String input = userInput.getText();
         String response = echoLex.getResponse(input);
+        String commandType = input.split(" ")[0];
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(input, userImage),
-                DialogBox.getDukeDialog(response, dukeImage)
+                DialogBox.getEchoLexDialog(response, dukeImage, commandType)
         );
         userInput.clear();
         if (input.equals("bye")) {
