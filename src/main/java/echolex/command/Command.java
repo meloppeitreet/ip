@@ -61,50 +61,37 @@ public class Command {
      * Executes the command on the given task list.
      *
      * @param tasks The list of tasks.
-     * @param ui The user interface for displaying messages.
-     * @param storage The storage handler for saving tasks.
      */
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
+    public String execute(TaskList tasks) {
 
         switch (command) {
         case "list":
-            ui.boxInput(listCommand(tasks));
-            break;
+            return listCommand(tasks);
         case "find":
-            ui.boxInput(findCommand(tasks));
-            break;
+            return findCommand(tasks);
         case "mark":
         case "unmark":
             try {
-                ui.boxInput(markCommand(tasks));
-                storage.save(tasks);
+                return markCommand(tasks);
             } catch (EchoLexException e) {
-                ui.boxInput("EchoLex Error: " + e.getMessage());
+                return "EchoLex Error: " + e.getMessage();
             }
-            break;
         case "delete":
             try {
-                ui.boxInput(deleteCommand(tasks));
-                storage.save(tasks);
+                return deleteCommand(tasks);
             } catch (EchoLexException e) {
-                ui.boxInput("EchoLex Error: " + e.getMessage());
+                return "EchoLex Error: " + e.getMessage();
             }
-            break;
         case "todo":
         case "deadline":
         case "event":
             try {
-                ui.boxInput(addCommand(tasks));
-                storage.save(tasks);
+                return addCommand(tasks);
             } catch (EchoLexException e) {
-                ui.boxInput("EchoLex Error: " + e.getMessage());
+                return "EchoLex Error: " + e.getMessage();
             }
-            break;
-        case "bye":
-            break;
         default:
-            ui.boxInput("Sorry, I did not understand that command.");
-            break;
+            return "Sorry, I did not understand that command.";
         }
 
     }
