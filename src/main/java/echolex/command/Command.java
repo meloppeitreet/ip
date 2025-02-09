@@ -149,10 +149,11 @@ public class Command {
                 if (command.equals("mark")) {
                     markEntry.markDone();
                     return "Nice! I've marked this task as done:\n  " + markEntry.toString();
-                } else { // if the command is "unmark"
-                    assert command.equals("unmark") : "Not a mark/unmark command"; // switch case failure in execute()
+                } else if (command.equals("unmark")) {
                     markEntry.unmarkDone();
                     return "OK, I've marked this task as not done yet:\n  " + markEntry.toString();
+                } else {
+                    throw new EchoLexException("The command is not recognized.");
                 }
             }
         } catch (NumberFormatException e) {
@@ -173,36 +174,12 @@ public class Command {
 
         switch (command) {
         case "deadline":
-            String by = options.get("by");
-            if (by == null) {
-                throw new EchoLexException("Deadline option '/by' has not been provided.");
-            }
-            try { // parse "by" date
-                LocalDateTime byDate = Parser.parseDate(by);
-                task = new Deadline(argument, Boolean.FALSE, byDate);
-            } catch (EchoLexException e) {
-                throw new EchoLexException(e.getMessage());
-            }
+            task = deadlineAddCommand();
             break;
         case "event":
-            String from = options.get("from");
-            if (from == null) {
-                throw new EchoLexException("Event option '/from' has not been provided.");
-            }
-            String to = options.get("to");
-            if (to == null) {
-                throw new EchoLexException("Event option '/to' has not been provided.");
-            }
-            try { // parse "from" and "to" dates
-                LocalDateTime fromDate = Parser.parseDate(from);
-                LocalDateTime toDate = Parser.parseDate(to);
-                task = new Event(argument, Boolean.FALSE, fromDate, toDate);
-            } catch (EchoLexException e) {
-                throw new EchoLexException(e.getMessage());
-            }
+            task = eventAddCommand();
             break;
         default:
-            assert command.equals("todo") : "Invalid task type specified"; // switch case failure in execute()
             task = new Todo(argument, Boolean.FALSE);
         }
 
@@ -212,6 +189,47 @@ public class Command {
         result = result.concat("\nNow you have " + tasks.size() + " tasks in the list.");
         return result;
 
+    }
+
+    /**
+     * Creates Deadline Task.
+     *
+     * @return Task object.
+     */
+    public Task deadlineAddCommand() throws EchoLexException {
+        String by = options.get("by");
+        if (by == null) {
+            throw new EchoLexException("Deadline option '/by' has not been provided.");
+        }
+        try { // parse "by" date
+            LocalDateTime byDate = Parser.parseDate(by);
+            return new Deadline(argument, Boolean.FALSE, byDate);
+        } catch (EchoLexException e) {
+            throw new EchoLexException(e.getMessage());
+        }
+    }
+
+    /**
+     * Creates Event Task.
+     *
+     * @return Event object.
+     */
+    public Task eventAddCommand() throws EchoLexException {
+        String from = options.get("from");
+        if (from == null) {
+            throw new EchoLexException("Event option '/from' has not been provided.");
+        }
+        String to = options.get("to");
+        if (to == null) {
+            throw new EchoLexException("Event option '/to' has not been provided.");
+        }
+        try { // parse "from" and "to" dates
+            LocalDateTime fromDate = Parser.parseDate(from);
+            LocalDateTime toDate = Parser.parseDate(to);
+            return new Event(argument, Boolean.FALSE, fromDate, toDate);
+        } catch (EchoLexException e) {
+            throw new EchoLexException(e.getMessage());
+        }
     }
 
     /**

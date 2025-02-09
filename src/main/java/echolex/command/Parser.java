@@ -1,7 +1,5 @@
 package echolex.command;
 
-import echolex.error.EchoLexException;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,9 +7,10 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
-
-import java.util.HashMap;
 import java.util.Arrays;
+import java.util.HashMap;
+
+import echolex.error.EchoLexException;
 
 /**
  * Represents a command that can be executed on a task list.
