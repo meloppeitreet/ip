@@ -39,6 +39,7 @@ public class Parser {
         // Options
         HashMap<String, String> options = new HashMap<>();
         for (String option : Arrays.copyOfRange(parts, 1, parts.length)) {
+            assert option != null && !option.isEmpty();
             String[] optionParts = option.split(" ", 2);
             options.put(optionParts[0], optionParts[1]);
         }
