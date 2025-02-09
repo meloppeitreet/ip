@@ -57,6 +57,7 @@ public class Command {
      * @return The value associated with the key, or an empty string if not found.
      */
     public String getOptions(String key) {
+        assert options != null : "options is null";
         return options.getOrDefault(key, "");
     }
 
@@ -119,9 +120,11 @@ public class Command {
         int counter = 1;
         String result = "Here are the tasks in your list:\n";
 
-        for (Task input : tasks) {
-            result = result.concat(counter + "." + input.toString() + "\n");
+        for (Task task : tasks) {
+            assert task != null : "task is null";
+            result = result.concat(counter + "." + task.toString() + "\n");
             counter++;
+            assert counter > 0 : "Task counter less than 1";
         }
 
         return result;
@@ -141,11 +144,13 @@ public class Command {
             if (markIndex > tasks.size() || markIndex < 0) {
                 throw new EchoLexException("The specified task is out of range. Please try again.");
             } else {
+                assert markIndex < tasks.size() && markIndex > 0 : "The specified task is out of range";
                 Task markEntry = tasks.get(markIndex - 1);
                 if (command.equals("mark")) {
                     markEntry.markDone();
                     return "Nice! I've marked this task as done:\n  " + markEntry.toString();
                 } else { // if the command is "unmark"
+                    assert command.equals("unmark") : "Not a mark/unmark command"; // switch case failure in execute()
                     markEntry.unmarkDone();
                     return "OK, I've marked this task as not done yet:\n  " + markEntry.toString();
                 }
@@ -197,6 +202,7 @@ public class Command {
             }
             break;
         default:
+            assert command.equals("todo") : "Invalid task type specified"; // switch case failure in execute()
             task = new Todo(argument, Boolean.FALSE);
         }
 
@@ -220,6 +226,7 @@ public class Command {
         if (deleteIndex > tasks.size() || deleteIndex < 0) {
             throw new EchoLexException("The specified task is out of range. Please try again.");
         } else {
+            assert deleteIndex < tasks.size() && deleteIndex > 0 : "The specified task is out of range";
             String result = "Noted. I've removed this task:\n  " + tasks.get(deleteIndex - 1).toString();
             tasks.remove(deleteIndex - 1);
             result += "\nNow you have " + tasks.size() + " tasks in the list.";
@@ -240,9 +247,11 @@ public class Command {
         String result = "";
 
         for (Task task : tasks) {
+            assert task != null : "task is null";
             if (task.getDescription().contains(argument)) {
                 result = result.concat(counter + "." + task.toString() + "\n");
                 counter++;
+                assert counter > 0 : "Task counter less than 1";
             }
         }
 

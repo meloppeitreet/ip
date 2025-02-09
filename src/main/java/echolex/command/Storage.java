@@ -44,6 +44,7 @@ public class Storage {
             } catch (IOException e) {
                 throw new EchoLexException(e.getMessage());
             }
+            assert file.exists() : "File " + filePath + " does not exist";
             return tasks;
         }
 

@@ -40,6 +40,7 @@ public class Parser {
         // Options
         HashMap<String, String> options = new HashMap<>();
         for (String option : Arrays.copyOfRange(parts, 1, parts.length)) {
+            assert option != null && !option.isEmpty();
             String[] optionParts = option.split(" ", 2);
             options.put(optionParts[0], optionParts[1]);
         }
@@ -69,7 +70,7 @@ public class Parser {
                     .withResolverStyle(ResolverStyle.STRICT);
 
             LocalDate date = LocalDate.parse(dateString, formatter);
-            return date.atStartOfDay();  // may be modified to accommodate time in the future
+            return date.atStartOfDay(); // may be modified to accommodate time in the future
 
         } catch (DateTimeParseException e) {
             throw new EchoLexException("Invalid date: " + e.getMessage() + "\nPlease provide the date in yyyy-mm-dd format (e.g., 2019-10-15)");
