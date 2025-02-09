@@ -2,6 +2,7 @@ package echolex.command;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 
 import echolex.error.EchoLexException;
 import echolex.task.Deadline;
@@ -239,11 +240,13 @@ public class Command {
         int counter = 1;
         String result = "";
 
-        for (Task task : tasks) {
-            if (task.getDescription().contains(argument)) {
-                result = result.concat(counter + "." + task.toString() + "\n");
-                counter++;
-            }
+        List<Task> results = tasks.stream()
+                .filter(task -> task.getDescription().contains(argument))
+                .toList();
+
+        for (Task task : results) {
+            result = result.concat(counter + "." + task.toString() + "\n");
+            counter++;
         }
 
         return result;
