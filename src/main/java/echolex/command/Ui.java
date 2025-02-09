@@ -2,6 +2,9 @@ package echolex.command;
 
 import java.util.Scanner;
 
+/**
+ * Displays and formats text to a CLI user.
+ */
 public class Ui {
 
     /** Chat Indent */
