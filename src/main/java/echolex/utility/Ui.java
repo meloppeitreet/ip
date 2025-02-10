@@ -1,4 +1,4 @@
-package echolex.command;
+package echolex.utility;
 
 import java.util.Scanner;
 

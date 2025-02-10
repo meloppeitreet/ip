@@ -1,10 +1,10 @@
 package echolex.command;
 
 import echolex.error.EchoLexException;
+import echolex.utility.Parser;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -1,9 +1,9 @@
 package echolex;
 
 import echolex.command.Command;
-import echolex.command.Parser;
-import echolex.command.Storage;
-import echolex.command.Ui;
+import echolex.utility.Parser;
+import echolex.utility.Storage;
+import echolex.utility.Ui;
 import echolex.error.EchoLexException;
 import echolex.task.TaskList;
 
