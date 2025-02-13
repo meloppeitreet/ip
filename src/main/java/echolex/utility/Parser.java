@@ -16,6 +16,7 @@ import echolex.command.DeleteCommand;
 import echolex.command.FindCommand;
 import echolex.command.ListCommand;
 import echolex.command.MarkCommand;
+import echolex.command.ScheduleCommand;
 import echolex.error.EchoLexException;
 
 /**
@@ -78,6 +79,8 @@ public class Parser {
         case "deadline":
         case "event":
             return new AddCommand(command, argument, options);
+        case "schedule":
+            return new ScheduleCommand(command, argument, options);
         default:
             return new Command(command, argument, options);
         }

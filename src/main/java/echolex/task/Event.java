@@ -16,6 +16,14 @@ public class Event extends Task {
         this.to = to;
     }
 
+    public LocalDateTime getFrom() {
+        return from;
+    }
+
+    public LocalDateTime getTo() {
+        return to;
+    }
+
     @Override
     public String saveFormat() {
         return "E | " + (isDone ? "1" : "0") + " | " + description + " | "
