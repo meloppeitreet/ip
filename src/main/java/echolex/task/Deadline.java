@@ -14,6 +14,10 @@ public class Deadline extends Task {
         this.by = by;
     }
 
+    public LocalDateTime getBy() {
+        return by;
+    }
+
     @Override
     public String saveFormat() {
         return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by.format(SAVE_OUTPUT_FORMATTER);
