@@ -1,0 +1,6 @@
+# The following does not do anything.
+
+on:
+  push:
+    branches:
+      - master
