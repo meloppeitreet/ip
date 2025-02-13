@@ -4,3 +4,10 @@ on:
   push:
     branches:
       - master
+
+jobs:
+  example_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print a message
+        run: echo "Hello, GitHub Actions!"
