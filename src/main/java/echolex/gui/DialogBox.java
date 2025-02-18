@@ -68,7 +68,9 @@ public class DialogBox extends HBox {
 
     private void changeDialogStyle(String commandType) {
         switch(commandType) {
-        case "add":
+        case "todo":
+        case "event":
+        case "deadline":
             dialog.getStyleClass().add("add-label");
             break;
         case "mark":

@@ -6,6 +6,7 @@ import echolex.EchoLex;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
@@ -25,7 +26,9 @@ public class Main extends Application {
             stage.setScene(scene);
             stage.setMinHeight(220);
             stage.setMinWidth(417);
-            fxmlLoader.<MainWindow>getController().setEchoLex(echoLex);  // inject the EchoLex instance
+            stage.setTitle("EchoLex Task Bot");
+            stage.getIcons().add(new Image("/images/icon.png"));
+            fxmlLoader.<MainWindow>getController().setEchoLex(echoLex); // inject the EchoLex instance
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();
