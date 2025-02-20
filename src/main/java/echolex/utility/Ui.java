@@ -13,8 +13,13 @@ public class Ui {
     static final String HORIZONTAL_LINE = "____________________________________________________________";
 
     /** Chat Hello / Goodbye */
-    static final String HELLO = "Hello! I'm EchoLex" + "\n" + "What can I do for you?";
-    static final String GOODBYE = "Bye. Hope to see you again soon!";
+    static final String HELLO = "Welcome, mortal. In this fleeting existence, "
+            + "time slips through our fingers like sand. "
+            + "Today, you are given the chance to conquer the tasks before you, "
+            + "to create meaning in the chaos. Complete what is in front of you—not for tomorrow, "
+            + "but for the fleeting moments that remain. In this endless void, "
+            + "let your actions give you direction. Let's begin, for the things that truly matter await.";
+    static final String GOODBYE = "Goodbye. I hope you found meaning in your existence today :)";
 
     public Ui() { };
 
