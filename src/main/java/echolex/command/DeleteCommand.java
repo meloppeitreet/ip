@@ -30,15 +30,19 @@ public class DeleteCommand extends Command {
     @Override
     public String execute(TaskList tasks) {
 
-        int deleteIndex = Integer.parseInt(argument);
-        if (deleteIndex > tasks.size() || deleteIndex < 0) {
-            return "The specified task is out of range. Please try again.";
-        } else {
-            assert deleteIndex < tasks.size() && deleteIndex > 0 : "The specified task is out of range";
-            String result = "Noted. I've removed this task:\n  " + tasks.get(deleteIndex - 1).toString();
-            tasks.remove(deleteIndex - 1);
-            result += "\nNow you have " + tasks.size() + " tasks in the list.";
-            return result;
+        try {
+            int deleteIndex = Integer.parseInt(argument);
+            if (deleteIndex > tasks.size() || deleteIndex < 0) {
+                return "The specified task is out of range. Please try again.";
+            } else {
+                assert deleteIndex < tasks.size() && deleteIndex > 0 : "The specified task is out of range";
+                String result = "Noted. I've removed this task:\n  " + tasks.get(deleteIndex - 1).toString();
+                tasks.remove(deleteIndex - 1);
+                result += "\nNow you have " + tasks.size() + " tasks in the list.";
+                return result;
+            }
+        } catch (NumberFormatException e) {
+            return "Invalid task index: \"" + argument + "\".\nPlease specify a number";
         }
 
     }

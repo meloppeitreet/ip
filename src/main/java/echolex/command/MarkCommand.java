@@ -49,7 +49,7 @@ public class MarkCommand extends Command {
                 }
             }
         } catch (NumberFormatException e) {
-            return "Invalid index: " + argument;
+            return "Invalid task index: \"" + argument + "\".\nPlease specify a number";
         }
 
     }
