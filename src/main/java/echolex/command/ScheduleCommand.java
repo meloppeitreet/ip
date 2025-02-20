@@ -36,7 +36,7 @@ public class ScheduleCommand extends Command {
     @Override
     public String execute(TaskList tasks) {
 
-        String result = "";
+        String result;
 
         if (options.containsKey("on")) {
             result = daySchedule(tasks);
