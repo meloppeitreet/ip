@@ -14,12 +14,12 @@ public class Ui {
 
     /** Chat Hello / Goodbye */
     static final String HELLO = "Welcome, mortal. In this fleeting existence, "
-            + "time slips through our fingers like sand. "
+            + "time slips through our fingers like sand.\n\n"
             + "Today, you are given the chance to conquer the tasks before you, "
-            + "to create meaning in the chaos. Complete what is in front of you—not for tomorrow, "
-            + "but for the fleeting moments that remain. In this endless void, "
-            + "let your actions give you direction. Let's begin, for the things that truly matter await.";
-    static final String GOODBYE = "Goodbye. I hope you found meaning in your existence today :)";
+            + "to create meaning in the chaos.\n\nComplete what is in front of you — not just for tomorrow, "
+            + "but for the fleeting moments that remain.\n\nIn this endless void, "
+            + "let your actions give you direction.\n\nLet's begin, for the things that truly matter await.";
+    static final String GOODBYE = "Goodbye. I hope you found joy in your actions today :)";
 
     public Ui() { };
 
